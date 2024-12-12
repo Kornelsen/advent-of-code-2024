@@ -2,7 +2,7 @@ const input = await Deno.readTextFile("./input.txt");
 const lines = input.split("\n");
 const grid = lines.map((line) => line.split(""));
 
-const visited = new Set<string>();
+const visitedCells = new Set<string>();
 
 const findRegion = (
   crop: string,
@@ -15,8 +15,8 @@ const findRegion = (
   if (cell !== crop) return;
 
   const key = [x, y].join(",");
-  if (visited.has(key)) return;
-  visited.add(key);
+  if (visitedCells.has(key)) return;
+  visitedCells.add(key);
   region.add(key);
 
   findRegion(crop, x + 1, y, region);
@@ -26,7 +26,7 @@ const findRegion = (
 };
 
 const findEdges = (region: Set<string>) => {
-  const visited = new Set<string>();
+  const visitedEdges = new Set<string>();
   let edges = 0;
   for (const key of region) {
     const [x, y] = key.split(",").map(Number);
@@ -34,20 +34,20 @@ const findEdges = (region: Set<string>) => {
     const left = [x - 1, y];
     const up = [x, y - 1];
     const down = [x, y + 1];
-    if (!region.has(right.join(",")) && !visited.has(key + "r")) {
-      traverseEdge(x, y, "r", region, visited);
+    if (!region.has(right.join(",")) && !visitedEdges.has(key + "r")) {
+      traverseEdge(x, y, "r", region, visitedEdges);
       edges++;
     }
-    if (!region.has(left.join(",")) && !visited.has(key + "l")) {
-      traverseEdge(x, y, "l", region, visited);
+    if (!region.has(left.join(",")) && !visitedEdges.has(key + "l")) {
+      traverseEdge(x, y, "l", region, visitedEdges);
       edges++;
     }
-    if (!region.has(up.join(",")) && !visited.has(key + "u")) {
-      traverseEdge(x, y, "u", region, visited);
+    if (!region.has(up.join(",")) && !visitedEdges.has(key + "u")) {
+      traverseEdge(x, y, "u", region, visitedEdges);
       edges++;
     }
-    if (!region.has(down.join(",")) && !visited.has(key + "d")) {
-      traverseEdge(x, y, "d", region, visited);
+    if (!region.has(down.join(",")) && !visitedEdges.has(key + "d")) {
+      traverseEdge(x, y, "d", region, visitedEdges);
       edges++;
     }
   }
